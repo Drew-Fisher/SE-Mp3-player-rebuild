@@ -1,18 +1,20 @@
 package mpeRecreation;
 
-import java.awt.MediaTracker;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 
-import javax.print.attribute.standard.Media;
-
-
 import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 
 
 
@@ -24,18 +26,18 @@ public class Song implements Serializable{
 	private String Name,Duration,filePath,Artist;
 	private int durInsec;
 	private File file;
-	private Mp3File m;
-	private ID3v1 i;
+	
 	
 	/*
 	 * Constructor for song that takes the file path as a String and creates a Song object
 	 */
-	public Song(String fpath) throws IOException, UnsupportedTagException, InvalidDataException {
-		File f = new File(fpath);
+	public Song(File f) throws IOException, UnsupportedTagException, InvalidDataException {
+		this.file = f;
+		
 		//movetoDir(fpath);
-		this.m = new Mp3File(f.getAbsolutePath().toString());
-		this.i = m.getId3v1Tag();
-		getmetatdata(f);
+		
+		getmetatdata();
+		
 		
 	}
 	
@@ -49,13 +51,21 @@ public class Song implements Serializable{
 		
 	}
 	
+	
+
+
+
 	/*
 	 * gets the meta data from an .mp3 file using Mp3agic and sets teh values of the song element
 	 */
-	private void getmetatdata(File f) throws UnsupportedTagException, InvalidDataException, IOException {
+	private void getmetatdata() throws UnsupportedTagException, InvalidDataException, IOException {
+		ID3v2 i = getm().getId3v2Tag();
+		
+
+		
 		this.Name = i.getTitle();
 		this.Artist = i.getArtist();
-		this.durInsec = (int)m.getLengthInSeconds();
+		this.durInsec = (int)getm().getLengthInSeconds();
 		this.Duration = getDur();
 	}
 	
@@ -70,8 +80,141 @@ public class Song implements Serializable{
 		return s;
 	}
 	
+	/*
+	 * Plays the mp3 file by passing in the Mediaplayer
+	 */
+	public void play(MediaPlayer p) {
+		p = new MediaPlayer(getMedia());
+		p.play();
+		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	
 	public String toString() {
 		return this.Name+this.Duration+this.Artist;
 		
 	}
+	
+	
+	
+	/*
+	 * ID3 check
+	 * returns int depending on the ID3v tag the file contains
+	 * 0 = ID3v2
+	 * 1 = ID3v1
+	 * 2 = other
+	 */
+	private int IDcheck() throws UnsupportedTagException, InvalidDataException, IOException {
+		if(getm().hasId3v2Tag()) {
+			return 0;
+		}
+		else if(getm().hasId3v1Tag()) {
+			return 1;
+		}
+		else {
+			return 2;
+		}
+	}
+	
+	
+	/*
+	 * getter for Mp3File m
+	 */
+	
+	public Mp3File getm() throws UnsupportedTagException, InvalidDataException, IOException {
+		return new Mp3File(this.file.getAbsolutePath().toString());
+	}
+	
+	/*
+	 * getter for media
+	 */
+	public Media getMedia() {
+		return new Media(this.file.toURI().toString());
+	}
+	
+	
+	/*
+	 * Getters and Setters
+	 */
+	
+	public String getName() {
+		return Name;
+	}
+
+
+
+	public void setName(String name) {
+		Name = name;
+	}
+
+
+
+	public String getDuration() {
+		return Duration;
+	}
+
+
+
+	public void setDuration(String duration) {
+		Duration = duration;
+	}
+
+
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+
+
+	public String getArtist() {
+		return Artist;
+	}
+
+
+
+	public void setArtist(String artist) {
+		Artist = artist;
+	}
+
+
+
+	public int getDurInsec() {
+		return durInsec;
+	}
+
+
+
+	public void setDurInsec(int durInsec) {
+		this.durInsec = durInsec;
+	}
+
+
+
+	public File getFile() {
+		return file;
+	}
+
+
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+
+
+	
+
+
+	
 }

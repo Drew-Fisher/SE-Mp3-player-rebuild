@@ -4,12 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 public class playList implements Serializable{
 	private String Name,Duration;
 	private boolean isshuffeled = false;
 	private int secs;
 	private ArrayList<Object> List,ShuffledList;
 	
+	
+	
+
 	public playList(String name) {
 		this.Name = name;
 		this.Duration = "";
@@ -27,14 +33,11 @@ public class playList implements Serializable{
 		this.isshuffeled = false;
 	}
 	
-	public void play() {
-		if(this.isshuffeled == true) {
-			
-		}
-		else {
-			
-		}
-	}
+	
+	/*
+	 * Traverses the playlist
+	 */
+	
 	
 	public void Shuffle() {
 		if(this.List.size() >0) {
@@ -50,4 +53,55 @@ public class playList implements Serializable{
 	}
 	
 	
+	
+	/*
+	 * getter and setters
+	 */
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
+
+	public String getDuration() {
+		return Duration;
+	}
+
+	public void setDuration(String duration) {
+		Duration = duration;
+	}
+
+	public boolean isIsshuffeled() {
+		return isshuffeled;
+	}
+
+	public void setIsshuffeled(boolean isshuffeled) {
+		this.isshuffeled = isshuffeled;
+	}
+
+	public int getSecs() {
+		return secs;
+	}
+
+	public void setSecs(int secs) {
+		this.secs = secs;
+	}
+
+	public ArrayList<Object> getList() {
+		return List;
+	}
+
+	public void setList(ArrayList<Object> list) {
+		List = list;
+	}
+
+	public ArrayList<Object> getShuffledList() {
+		return ShuffledList;
+	}
+
+	public void setShuffledList(ArrayList<Object> shuffledList) {
+		ShuffledList = shuffledList;
+	}
 }
