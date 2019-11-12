@@ -162,4 +162,22 @@ public class FileManager {
 		}
 		return true;
 	}
+	
+	/*
+	 * Deletes PlayList
+	 */
+	public static void deletePlayList(playList p) {
+		String path = "./Playlist/"+p.getName();
+		File f = new File(path);
+		f.delete();
+	}
+	
+	
+	
+	/*
+	 * Delete from MusicLibary
+	 */
+	public static void deleteSong(Song s) {
+		
+	}
 }

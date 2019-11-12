@@ -1,5 +1,6 @@
 package mpeRecreation;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -40,16 +41,35 @@ public class playList implements Serializable{
 	
 	
 	public void Shuffle() {
-		if(this.List.size() >0) {
+		int z = this.List.size()-1;
+		if(this.List.size() > 0) {
 			ArrayList<Object>temp = this.List;
 			this.ShuffledList = new ArrayList();
+			ArrayList tem = (ArrayList) temp.clone();
 			for(int x = 0; x<=this.List.size()-1;x++){
-				Random rand = new Random(this.List.size()-1);
-				int y = rand.nextInt();
-				this.ShuffledList.add(temp.remove(y));
+				if(z == 0) {
+					this.ShuffledList.add(tem.remove(0));
+				}
+				else {
+					Random rand = new Random();
+					int y = rand.nextInt(z);
+					System.out.println(y);
+					this.ShuffledList.add(tem.remove(y));
+					z--;
+				}
+				
 			}
 			this.isshuffeled = true;
 		}
+	}
+	
+	/*
+	 * Delete from play list
+	 */
+	public void deleteFromList(Song s) throws IOException {
+		this.isshuffeled = false;
+		this.List.remove(s);
+		FileManager.savePlayList(this);
 	}
 	
 	

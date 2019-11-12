@@ -56,17 +56,52 @@ public class Song implements Serializable{
 
 
 	/*
-	 * gets the meta data from an .mp3 file using Mp3agic and sets teh values of the song element
+	 * gets the meta data from an .mp3 file using Mp3agic and sets the values of the song element
 	 */
 	private void getmetatdata() throws UnsupportedTagException, InvalidDataException, IOException {
-		ID3v2 i = getm().getId3v2Tag();
+		int check = IDcheck();
+		System.out.println(check);
+		if(check == 0) {
+			ID3v2 i = getm().getId3v2Tag();
+			if(i.getTitle() == null) {
+				this.Name = this.file.getName().replace(".mp3", "");
+			}
+			else {
+				this.Name = i.getTitle();
+			}
+			if(i.getArtist() == null) {
+				this.Artist = "n/a";
+			}
+			else {
+				this.Artist = i.getArtist();
+			}
+			this.durInsec = (int)getm().getLengthInSeconds();
+			this.Duration = getDur();
+		}
+		else if(check == 1) {
+			ID3v1 i = getm().getId3v1Tag();
+			if(i.getTitle() == null) {
+				this.Name = this.file.getName().replace(".mp3", "");
+			}
+			else {
+				this.Name = i.getTitle();
+			}
+			if(i.getArtist() == null) {
+				this.Artist = "n/a";
+			}
+			else {
+				this.Artist = i.getArtist();
+			}
+			this.durInsec = (int)getm().getLengthInSeconds();
+			this.Duration = getDur();
+			
+		}
+		else {
+			this.Name = this.file.getName();
+			this.Artist ="n/a";
+			this.Duration = "n/a";
+		}
 		
-
-		
-		this.Name = i.getTitle();
-		this.Artist = i.getArtist();
-		this.durInsec = (int)getm().getLengthInSeconds();
-		this.Duration = getDur();
 	}
 	
 	/*
